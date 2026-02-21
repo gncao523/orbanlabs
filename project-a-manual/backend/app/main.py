@@ -52,6 +52,18 @@ app.add_middleware(
 )
 
 
+@app.get("/")
+async def root():
+    """Root endpoint - links to API docs."""
+    return {
+        "message": "Notes API",
+        "docs": "/docs",
+        "redoc": "/redoc",
+        "health": "/health",
+        "notes": "/notes",
+    }
+
+
 @app.get("/health")
 async def health():
     """Health check endpoint (no auth required)."""
