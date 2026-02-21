@@ -10,7 +10,7 @@
 
 1. Create and activate a virtual environment:
 
-   ```bash
+   ```cmd
    cd project-a-manual/backend
    python -m venv venv
    # Windows:
@@ -19,7 +19,7 @@
 
 2. Install dependencies:
 
-   ```bash
+   ```cmd
    pip install -r requirements.txt
    ```
 

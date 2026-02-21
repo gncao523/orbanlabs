@@ -1,0 +1,56 @@
+"""Pytest fixtures for URL Shortener tests."""
+import os
+
+os.environ["URLSHORTENER_API_KEY"] = "us_test_7f3a9b2c1e4d8f6a5b3c9d2e"
+
+import pytest
+import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+
+from app.main import app
+from app.database import Base, get_db
+
+TEST_DB_URL = "sqlite+aiosqlite:///./test_urlshortener.db"
+TEST_API_KEY = "us_test_7f3a9b2c1e4d8f6a5b3c9d2e"
+
+engine = create_async_engine(TEST_DB_URL, echo=False)
+TestSession = async_sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False, autocommit=False, autoflush=False
+)
+
+
+async def override_get_db():
+    async with TestSession() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
+
+
+@pytest_asyncio.fixture
+async def db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    async with TestSession() as session:
+        yield session
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+
+
+@pytest_asyncio.fixture
+async def client(db):
+    app.dependency_overrides[get_db] = override_get_db
+    transport = ASGITransport(app=app)
+    async with AsyncClient(
+        transport=transport,
+        base_url="http://test",
+        headers={"X-API-Key": TEST_API_KEY},
+        follow_redirects=False,
+    ) as ac:
+        yield ac
+    app.dependency_overrides.clear()
