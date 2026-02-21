@@ -41,6 +41,11 @@ app = FastAPI(
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
+    openapi_url="/openapi.json",
+    openapi_tags=[
+        {"name": "Notes", "description": "CRUD operations for notes"},
+        {"name": "Health", "description": "Health check and root endpoints"},
+    ],
 )
 
 app.add_middleware(
@@ -52,7 +57,7 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/", tags=["Health"])
 async def root():
     """Root endpoint - links to API docs."""
     return {
@@ -64,13 +69,13 @@ async def root():
     }
 
 
-@app.get("/health")
+@app.get("/health", tags=["Health"])
 async def health():
     """Health check endpoint (no auth required)."""
     return {"status": "ok"}
 
 
-@app.post("/notes", response_model=NoteResponse)
+@app.post("/notes", response_model=NoteResponse, tags=["Notes"])
 async def create_note_endpoint(
     note: NoteCreate,
     db: AsyncSession = Depends(get_db),
@@ -81,7 +86,7 @@ async def create_note_endpoint(
     return _note_to_response(db_note)
 
 
-@app.get("/notes", response_model=list[NoteResponse])
+@app.get("/notes", response_model=list[NoteResponse], tags=["Notes"])
 async def list_notes(
     tag: str | None = Query(None, description="Filter by tag"),
     keyword: str | None = Query(None, description="Search in title and body"),
@@ -93,7 +98,7 @@ async def list_notes(
     return [_note_to_response(n) for n in notes]
 
 
-@app.get("/notes/{note_id}", response_model=NoteResponse)
+@app.get("/notes/{note_id}", response_model=NoteResponse, tags=["Notes"])
 async def read_note(
     note_id: int,
     db: AsyncSession = Depends(get_db),
@@ -109,7 +114,7 @@ async def read_note(
     return _note_to_response(note)
 
 
-@app.put("/notes/{note_id}", response_model=NoteResponse)
+@app.put("/notes/{note_id}", response_model=NoteResponse, tags=["Notes"])
 async def update_note_endpoint(
     note_id: int,
     note_update: NoteUpdate,
@@ -126,7 +131,7 @@ async def update_note_endpoint(
     return _note_to_response(db_note)
 
 
-@app.delete("/notes/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/notes/{note_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Notes"])
 async def delete_note_endpoint(
     note_id: int,
     db: AsyncSession = Depends(get_db),
