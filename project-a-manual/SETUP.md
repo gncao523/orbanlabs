@@ -23,11 +23,11 @@
    pip install -r requirements.txt
    ```
 
-3. (Optional) Set environment variables:
+3. (Optional) Set environment variables. Copy `backend/.env.example` to `backend/.env` or set manually:
 
    ```bash
-   # API key for authentication (default: dev-api-key-change-me)
-   set NOTES_API_KEY=your-secret-api-key
+   # API key for authentication (default: nb_sample_7f3a9b2c1e4d8f6a5b3c9d2e)
+   set NOTES_API_KEY=nb_sample_7f3a9b2c1e4d8f6a5b3c9d2e
 
    # Database URL (default: sqlite+aiosqlite:///./notes.db)
    set DATABASE_URL=sqlite+aiosqlite:///./notes.db
@@ -53,11 +53,11 @@
    npm install
    ```
 
-2. (Optional) Configure API URL and key in `.env.local`:
+2. (Optional) Configure API URL and key. Copy `frontend/.env.example` to `frontend/.env.local` or set manually:
 
    ```
    NEXT_PUBLIC_API_URL=http://localhost:8000
-   NEXT_PUBLIC_API_KEY=dev-api-key-change-me
+   NEXT_PUBLIC_API_KEY=nb_sample_7f3a9b2c1e4d8f6a5b3c9d2e
    ```
 
 3. Run the frontend:

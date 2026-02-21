@@ -4,7 +4,7 @@ import pytest
 from httpx import AsyncClient
 
 # Set test API key before importing app
-os.environ["NOTES_API_KEY"] = "test-api-key"
+os.environ["NOTES_API_KEY"] = "nb_sample_7f3a9b2c1e4d8f6a5b3c9d2e"
 
 
 @pytest.mark.asyncio

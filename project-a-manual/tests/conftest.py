@@ -1,6 +1,6 @@
 """Pytest fixtures for Notes API tests."""
 import os
-os.environ["NOTES_API_KEY"] = "test-api-key"
+os.environ["NOTES_API_KEY"] = "nb_sample_7f3a9b2c1e4d8f6a5b3c9d2e"
 
 import pytest
 import pytest_asyncio
@@ -11,7 +11,7 @@ from app.main import app
 from app.database import Base, get_db
 
 TEST_DB_URL = "sqlite+aiosqlite:///./test_notes.db"
-TEST_API_KEY = "test-api-key"
+TEST_API_KEY = "nb_sample_7f3a9b2c1e4d8f6a5b3c9d2e"
 
 engine = create_async_engine(TEST_DB_URL, echo=False)
 TestSession = async_sessionmaker(
