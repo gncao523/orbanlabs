@@ -1,4 +1,4 @@
-# Notes API - Setup Guide
+# Notes API - Project Running Guide
 
 ## Prerequisites
 
